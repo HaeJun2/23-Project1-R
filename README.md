@@ -11,6 +11,154 @@ README.md 작성요령 (파일이름 = 대문자)
 작성한 코드가 너무 길 경우 README말고 다른곳 저장(재사용 불가할정도로 길 경우)
 *************
 
+
+## 2023-04-06 R언어
+
+### 매트릭스 - 행과 열에 이름 붙이기
+    - > colnames(score) <- c('국어','영어','수학')
+    - > rownames(score) <- c('john','tom','mark','jane')
+             국어 영어 수학
+        john   90   88   96
+        tom    87   94   74
+        mark   76  500   75
+        jane   98   27   58
+    - > score['john','국어']    # [1] 90
+    - > score['mark',]          # 국어 영어 수학 
+                                   76  500   75 
+    - > rownames(score)         # [1] "john" "tom"  "mark" "jane"
+    - > colnames(score)[2]      # [1] "영어"
+
+### 데이터프레임
+    - 매트릭스와 마찬가지로 2차원 형태의 데이터를 저장하고 분석하는데 사용되는 자료구조
+    - 여러 자료형을 입력 가능
+
+    > city = c("Seoul", "Tokyo", "Washington")
+    > rank = c(1,3,2)
+    > city.info = data.frame(city, rank)
+    > city.info
+                city rank
+        1      Seoul    1
+        2      Tokyo    3
+        3 Washington    2
+    
+    - iris = 150그루의 붓꽃에 대해 4개 분야의 측정 데이터와 품종 정보를 결합해서 만든 데이터셋
+
+### 데이터셋의 기본 정보 알아보기
+    - dim(iris)                 #행과 열의 개수 보이기
+    - colnames(iris)            #열 이름 보이기
+    - head(iris)                #데이터셋의 앞부분 일부 보기 /뒷부분은 tail
+    - str(iris)                 #데이터셋 요약 정보
+    - levels(iris[,5])          #품종의 종류 보기(중복 제거)
+    - table(iris[,"species])    #품종의 종류별 행의 개수 세기
+
+### 매트릭스와 데이터프레임 다루기
+    - colSums(iris[,-5])    #열별 합계/평균:Means   
+    #-5는 5번째 컬럼을 제외(5번째 열은 str타입)
+
+    - 행과 열의 방향 변환하기
+        > z = matrix(1:20, nrow=4,ncol=5)   
+    #행과열의 값과 데이터 개수의 값이 같도록 선언해줘야 한다.
+        > t(z)      #행과 열 뒤바뀜
+            [,1] [,2] [,3] [,4]
+        [1,]    1    2    3    4
+        [2,]    5    6    7    8
+        [3,]    9   10   11   12
+        [4,]   13   14   15   16
+        [5,]   17   18   19   20
+
+    - 조건에 맞는 행과 열의 값 추출
+        > IR.2 = subset(iris, Sepal.Length>5.0 & Sepal.Width>4.0)
+        > IR.2[,c(2,4)]
+        Sepal.Width Petal.Width
+        16         4.4         0.4
+        33         4.1         0.1
+        34         4.2         0.2
+    
+    - 산술연산
+        > a = matrix(1:20,4,5)
+        > b = matrix(21:40,4,5)
+        > 2*a
+                [,1] [,2] [,3] [,4] [,5]
+            [1,]    2   10   18   26   34
+            [2,]    4   12   20   28   36
+            [3,]    6   14   22   30   38
+            [4,]    8   16   24   32   40
+        > a+b
+                [,1] [,2] [,3] [,4] [,5]
+            [1,]   22   30   38   46   54
+            [2,]   24   32   40   48   56
+            [3,]   26   34   42   50   58
+            [4,]   28   36   44   52   60
+
+    - 자료구조 확인
+        > class(iris)           #iris 데이터셋의 자료구조 확인
+        > class(state.x77)      #state.x77 데이터셋의 자료구조 확인
+        > is.matrix(iris)       #데이터셋이 매트릭스인지 확인
+
+    - 자료구조 변환
+        is.matrix(state.x77)
+        st = data.frame(state.x77)      #매트릭스인 state.x77을 데이터셋으로 변환
+        head(st)
+        class(st)
+        #반대의 경우
+        iris.m = as.matrix(iris[,1:4])
+
+    - 데이터프레임 열 추출
+        > iris$Species    
+
+### 데이터의 입력과 출력
+    > age = c('임의의 값')
+    > young = min(age)  #age중 제일 낮은 값
+    > old = max(age)    #age중 제일 높은 값
+
+    - svDialogs패키지 다운로드 : install.packages('svDialogs')
+                                library(svDialogs)
+        >user.input = dlgInput('Input income')$res
+        >user.input
+        >income = as.numeric(user.input)    #문자열을 숫자로
+        >income
+        >tax = income * 0.05                #세금 계산
+        >cat('세금 :',tax)
+    
+    - print함수
+        1.하나의 값을 출력할 때
+        2. 데이터프레임과 같은 2차원 자료구조를 출력할 때
+        3. 출력후 자동 줄바꿈
+    - cat함수
+        1. 여러 개의 값을 연결해서 출력할 때
+        ########작성필요
+
+### 파일을 이용해 데이터를 읽고 쓰기
+    - R에서 파일을 읽으려면 현재 작업 폴더와 파일 이름을 지정해야 한다
+    > getwd()   #현재 작업 폴더 알아내기
+    > setwd('C:/Users/user/Documents/test') #작업폴더 변경하기
+
+    - csv파일 : R에서 데이터 분석을 위해 가장 많이 사용하는 파일 형태, 경로를 알고 있어야 하는 단점
+
+    > air = read.csv('airquality.csv', header=T)    #csv파일 읽기
+    > head(air)
+        Ozone Solar.R Wind Temp Month Day
+    1    41     190  7.4   67     5   1
+    2    36     118  8.0   72     5   2
+    3    12     149 12.6   74     5   3
+    4    18     313 11.5   62     5   4
+    5    NA      NA 14.3   56     5   5
+    6    28      NA 14.9   66     5   6
+    > class(air)    #csv자료구조 확인
+    [1] "data.frame"
+    
+    - write.csv = 데이터 쓰기
+    > my.iris = subset(iris, Species=='setosa')
+    > write.csv(my.iris,'my_iris.csv',row.names=F)  #파일쓰기
+    > read.csv('my_iris.csv', header=T)             #my_iris.csv읽기
+
+    - 엑셀파일도 라이브러리를 설치해서 읽을 수 있음(csv만xlsx로 바꿔주면 가능)
+
+    
+    
+**************
+
+
 ## 2023-03-23 R언어
 
 ### 윈도우 패키지 매니저
