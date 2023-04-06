@@ -254,9 +254,7 @@ README.md 작성요령 (파일이름 = 대문자)
         >str <- paste('good','morning', sep=' / '
         >str
         [1] "good / morning"
-    
-### 벡터의 활용
-    - 자료 분석은 자료에 담긴 // 필요
+   
 
 
 ************
