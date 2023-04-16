@@ -25,7 +25,8 @@ README.md 작성요령 (파일이름 = 대문자)
     head(test) -> view(test) //airquality파일 출력
     ```
 
-### if-else문
+### 조건문
+-   ifelse
     ```r
     job.type = 'A'
     if (job.type == 'B') {
@@ -38,7 +39,6 @@ README.md 작성요령 (파일이름 = 대문자)
     // and = & / or = |
     ```
 
-### ifelse문
     ```r
     //삼항연산자와 비슷한 구조
     //구조 = ifelse(비교조건, 참일 때 값, 거짓일 때 값)
@@ -102,7 +102,7 @@ README.md 작성요령 (파일이름 = 대문자)
     }                           // y=2 디폴트로 넣어서 y 생략 가능
     ```
 
-- 저장과 재실행
+-   저장과 재실행
     ```r
     //자주쓰는 함수를 파일로 만들어 저장해뒀다가
     setwd('C:/Users/user/Documents/test')           //wd경로
@@ -111,7 +111,7 @@ README.md 작성요령 (파일이름 = 대문자)
     print(a)
     ```
 
-### 조건에 맞는 데이터 위치 찾기
+-   조건에 맞는 데이터 위치 찾기
     ```r
     score = c(76, 84, 69, 50, 95, 60, 82, 71, 88, 84)
     which(score==69)    //3
