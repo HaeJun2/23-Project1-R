@@ -19,20 +19,14 @@ README.md 작성요령 (파일이름 = 대문자)
 -   작업 폴더 지정
     ```r
     setwd('C:/Rwork')   //경로
+    getwd() //출력
+    sink('result.txt', append = T) //파일 출력 시작
+    sink() //파일 출력 정지
+    head(test) -> view(test) //airquality파일 출력
     ```
-
-    탭이나 공백으로 분리된 파일 읽기
-
-    ```r
-    air <- read.table("airquality.txt", header = T, sep = "")
-    head(air)
-    ```
-
-    ## 이거 뭔지모름
-    air <- read.table('airquality.txt', header=T, sep=' ')
-    head(air)
 
 ### if-else문
+    ```r
     job.type = 'A'
     if (job.type == 'B') {
         bonus = 200
@@ -42,19 +36,23 @@ README.md 작성요령 (파일이름 = 대문자)
     print(bouns)        //100 출력
     //else는 생략 가능
     // and = & / or = |
+    ```
 
 ### ifelse문
+    ```r
     //삼항연산자와 비슷한 구조
-    구조 = ifelse(비교조건, 참일 때 값, 거짓일 때 값)
+    //구조 = ifelse(비교조건, 참일 때 값, 거짓일 때 값)
     a = 10
     b = 20
     c = ifelse(a>b, a, b)
     print(c)
+    ```
 
 ### 반복문
-    - for문 구조
+- for문 구조
+    ```r
     for(반복 변수 in 반복 범위(클론)){
-        반복할 명령문
+        //반복할 명령문
     }
     for (i in 1:5){
         print('*')
@@ -62,8 +60,10 @@ README.md 작성요령 (파일이름 = 대문자)
     for (i in 1:9){
         cat(i, '\n)
     }
+    ```r
     
-    - while문 구조
+- while문 구조
+    ```r
     sum = 0
     i = -1
     while(i <= 100) {
@@ -71,19 +71,23 @@ README.md 작성요령 (파일이름 = 대문자)
         i = i+1
     }
     print(sum)
+    `rrr
 
-    - apply() 계열 함수
-    매트릭스나 데이터프레임에 있는 행들이나 열들을 하나하나 차례로 꺼내 평균이나 합계 등을 구하는 작업을 수행할 때 유용
+- apply() 계열 함수
+    ```r
+    // 매트릭스나 데이터프레임에 있는 행들이나 열들을 하나하나 차례로 꺼내 평균이나 합계 등을 구하는 작업을 수행할 때 유용
     apply(데이터셋, 행/열 방향 지정, 적용 함수)
     apply(iris[,1:4], 1, mean)  //행 방향으로 적용
     apply(iris[,1:4], 2, mean)  //열 방향으로 함수 적용
+    ```
 
 ### 사용자 정의 함수
-    - 사용자 정의 함수 = 사용자가 스스로 만드는 함수
-    함수명 = function(파라미터 목록){
+- 사용자 정의 함수 = 사용자가 스스로 만드는 함수
+    /*함수명 = function(파라미터 목록){
         실행할 명령문
         return(실행 결과)
-    }
+    }*/
+    ```r
     mymax = function(x,y) {
         num.max = x
         if (y>x) {
@@ -96,25 +100,28 @@ README.md 작성요령 (파일이름 = 대문자)
         result = x/y
         return(result)
     }                           // y=2 디폴트로 넣어서 y 생략 가능
+    ```
 
-    - 저장과 재실행
-    자주쓰는 함수를 파일로 만들어 저장해뒀다가
+- 저장과 재실행
+    ```r
+    //자주쓰는 함수를 파일로 만들어 저장해뒀다가
     setwd('C:/Users/user/Documents/test')           //wd경로
     source('C:/Users/user/Documents/test/mydiv.R')   //호출
     a = mydiv(20,4)
     print(a)
+    ```
 
 ### 조건에 맞는 데이터 위치 찾기
-    > score = c(76, 84, 69, 50, 95, 60, 82, 71, 88, 84)
-    > which(score==69)
-    [1] 3
+    ```r
+    score = c(76, 84, 69, 50, 95, 60, 82, 71, 88, 84)
+    which(score==69)    //3
     which.max(score)    //min도 사용가능
 
-    > idx = which(score<=60)
-    > idx   // 4 6
-    > score[idx] = 61
-    > score
-    [1] 76 84 69 61 95 61 82 71 88 84
+    idx = which(score<=60)
+    idx   // 4 6
+    score[idx] = 61
+    score   //76 84 69 61 95 61 82 71 88 84
+    ```
     
     
 
