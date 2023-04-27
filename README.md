@@ -12,29 +12,171 @@ README.md 작성요령 (파일이름 = 대문자)
 *************
 
 
+## 2023-04-27
+
+<p></p>
+
+### 막대그래프를 그려봅시다
+
+막대그래프 작성의 기초
+
+-   데이터가 포함하고 있는 정포를 이해하기 쉽게 표현하는 과정을 데이터 시각화(data visualization)이라고 함.
+-   막대그래프는 기본적인 데이터 시각화 도구.
+-   막대그래프는 그룹별로 집계된 데이터를 표현하는 도구이기 때문에 막대그래프를 작성하기 위해서는 먼저      그룹별로 데이터를 집계하는 작업이 필요함.
+-   도수분포표 계산 하기.
+    ```r
+    fav <- c("A", "B", "C", "A", "B", "C", "A", "A", "A", "B", "B", "C")
+    fav
+    table(fav)
+    ```
+-   막대그래프
+
+    ```r
+    ds <- table(fav)
+    ds
+    barplot(ds, main = "favorite")
+    #막대그래프 그리기
+    barplot(ds, main = "favorite", col = c("red", "blue", "green"))
+    #색상 지정
+    barplot(ds, main = "favorite", col = c("red", "blue", "green"), xlab = "xlab", ylab = "ylab")
+    #색인 지정
+    barplot(ds, main = "favorite", col = rainbow(4), xlab = "xlab", ylab = "ylab")
+    #팔레트에서 색을 지정하여 사용하기
+    barplot(ds, main = "favorite", col = rainbow(4), xlab = "xlab", ylab = "ylab", horiz = TRUE)
+    #막대그래프를 수평방향으로 출력하기
+    barplot(ds, main = "favorite", col = rainbow(4), xlab = "xlab", ylab = "ylab", names = c("1", "2", "3"))
+    #X축 그룹의 이름 지정하기
+    barplot(ds, main = "favorite", col = rainbow(4), xlab = "xlab", ylab = "ylab", names = c("1", "2", "3"), las = 2)
+    #X축 그룸의 이름을 
+    ```
+
+-   실행 결과.
+    ![0](0.png)
+
+-   나이대별 인구 추정.
+    ```r
+    #데이터 입력
+    age.A = c(13709, 10974, 7979, 5000, 4250)
+    age.B = c(17540, 29701, 36209, 33947, 22487)
+    age.C = c(991, 2195, 5366, 12980, 19007)
+
+    ds = rbind(age.A, age.B, age.C)
+    colnames(ds) = c('1970', '1990', '2010', '2030', '2050')
+
+    par(mfrow=c(1,1), mar=c(5, 5, 5, 7))        #mar = 마진
+    barplot(ds, main= '인구 추정'
+      , col=rainbow(3)                          #col = 막대에 컬러주기(각각 지정 가능)
+      , beside=T                                #beside = 그래프를 스택이 아닌 형태로 나타내기
+      , legend.text=T                           #legend = 범례추가
+      #, legend.text=c('0~14세', '15~64세','65세 이상') # 범례 내용 바꾸기
+      , args.legend = list(x='topright', bty = 'o', inset=c(-0.25,0))
+    )
+    #x='topright' >> 범례를 출력할 기본 위치 지정
+    #bty = 'o' >>>> 테두리 선 추가
+    #inset=c(-0.25,0) >> 범례를 x축과 y축 기준으로 이동시킨다, y축은 위가아닌 아래쪽으로 이동된다.
+
+    ```
+
+-   히스토그램
+-   외관상 막대그래프와 유사하나 막대사이에 간격이 있으면 막대그래프, 간격이 없으면 히스토그램
+-   히스토그램에서는 막대의 면적이 의미가 있다.
+    ```r
+    head(cars)
+    dist = cars[,2]
+    dist
+    hist(dist,
+        , main='Histogram for 제동거리'     #제목
+        , xlab='제동거리'                   #x축 레이블
+        , ylab='빈도수'                     #y축 레이블
+        , border='blue'                     #막대 테두리색
+        , col='green'                       #막대 색
+        , las=2                             #x축 글씨 방향(0~3)
+        , breaks=5                          #막대 개수 조절
+    )
+    result = hist(dist                      #result에 데이터 선택해서 저장
+        , main='histogram for 제동거리'
+        , breaks=5)
+    result                                  #result 출력
+    ```
+
+-   다중 그래프
+-   zoom버튼 클릭 시 그래프를 크게 볼 수 있다.
+-   zoom으로 그래프 창을 새로 띄웠을 경우 우클릭으로 복사가 가능하다.
+    ```r
+    par(mfrow=c(2,2), mar=c(3,3,4,2)) #화면분할(2*2)
+
+    hist(iris$Sepal.Length
+        , main='Sepal.Length'
+        , col='orange')
+
+    barplot(table(mtcars$cy1)
+            , main='mtcars'
+            , col=c('red','green','blue'))
+
+    barplot(table(mtcars$gear)
+            , main='mtcars'
+            , col=rainbow(3)
+            , horiz=TRUE)
+
+    pie(table(mtcars$cy1)
+        , main='mtcars'
+        , col=topo.colors(3)           #topo팔레트 사용
+        , radius=2)
+
+    par(mfrow=c(1,1), mar=c(5,4,4,2)+.1) #화면분할 취소
+    ```
+
+-   원그래프
+    ```r
+    install.packages('plotrix')         #원그래프를 3d로 나타내기
+
+    favor = c('WINTER', 'SUMMER', 'SPRING','FALL')
+    ds = table(favor)
+    ds
+    library(plotrix)
+    pie3D(ds                            #pie3D는 3d pie는 평면 원
+        , main='선호계절'
+        , radius=1
+        , col=rainbow(3)
+        , explode=0.1                   #여백
+    )
+    ```
+-   선그래프
+-   연도별 인구 증가와 같이 시간의 변화아 따라 수집된 데이터를 시각화하는 데 주로 사용
+    ```r
+    month = 1:12                                #데이터 입력
+    late = c(5,8,7,9,4,6,12,13,8,6,6,4)           
+    plot(month                                  #xdata
+        , late                                  #ydata
+        , main='지각생통계'                      #제목
+        , type='l'                              #그래프 종류 선택(알파벳)
+        , lty=1                                 #선의 종류 선택
+        , lwd=1                                 #선의 굵기 선택
+        , xlab='Month'                          #x축 레이블
+        , ylab='Late cnt'                       #y축 레이블
+    )
+    ```
+
+
+<p></p>
+****************************************
+
 ## 2023-04-13 
 
 ### 파일 입출력에서 알아야 할 내용 : 결과물을 파일로 출력하는 방법
 
-    실행 결과를 파일로 출력하기
-
+-   작업 폴더 지정
     ```r
-    sink("result.txt", append = T) #파일로 출력 시작
-    sink() #파일로 출력 정지
+    setwd('C:/Rwork')   //경로
+    getwd() //출력
+    sink('result.txt', append = T) //파일 출력 시작
+    sink() //파일 출력 정지
+    head(test) -> view(test) //airquality파일 출력
     ```
 
-    탭이나 공백으로 분리된 파일 읽기
-
+### 조건문
+-   ifelse
     ```r
-    air <- read.table("airquality.txt", header = T, sep = "")
-    head(air)
-    ```
-
-    ## 이거 뭔지모름
-    air <- read.table('airquality.txt', header=T, sep=' ')
-    head(air)
-
-### if-else문
     job.type = 'A'
     if (job.type == 'B') {
         bonus = 200
@@ -44,19 +186,22 @@ README.md 작성요령 (파일이름 = 대문자)
     print(bouns)        //100 출력
     //else는 생략 가능
     // and = & / or = |
+    ```
 
-### ifelse문
+    ```r
     //삼항연산자와 비슷한 구조
-    구조 = ifelse(비교조건, 참일 때 값, 거짓일 때 값)
+    //구조 = ifelse(비교조건, 참일 때 값, 거짓일 때 값)
     a = 10
     b = 20
     c = ifelse(a>b, a, b)
     print(c)
+    ```
 
 ### 반복문
-    - for문 구조
+- for문 구조
+    ```r
     for(반복 변수 in 반복 범위(클론)){
-        반복할 명령문
+        //반복할 명령문
     }
     for (i in 1:5){
         print('*')
@@ -64,8 +209,10 @@ README.md 작성요령 (파일이름 = 대문자)
     for (i in 1:9){
         cat(i, '\n)
     }
+    ```r
     
-    - while문 구조
+- while문 구조
+    ```r
     sum = 0
     i = -1
     while(i <= 100) {
@@ -73,19 +220,23 @@ README.md 작성요령 (파일이름 = 대문자)
         i = i+1
     }
     print(sum)
+    `rrr
 
-    - apply() 계열 함수
-    매트릭스나 데이터프레임에 있는 행들이나 열들을 하나하나 차례로 꺼내 평균이나 합계 등을 구하는 작업을 수행할 때 유용
+- apply() 계열 함수
+    ```r
+    // 매트릭스나 데이터프레임에 있는 행들이나 열들을 하나하나 차례로 꺼내 평균이나 합계 등을 구하는 작업을 수행할 때 유용
     apply(데이터셋, 행/열 방향 지정, 적용 함수)
     apply(iris[,1:4], 1, mean)  //행 방향으로 적용
     apply(iris[,1:4], 2, mean)  //열 방향으로 함수 적용
+    ```
 
 ### 사용자 정의 함수
-    - 사용자 정의 함수 = 사용자가 스스로 만드는 함수
-    함수명 = function(파라미터 목록){
+- 사용자 정의 함수 = 사용자가 스스로 만드는 함수
+    /*함수명 = function(파라미터 목록){
         실행할 명령문
         return(실행 결과)
-    }
+    }*/
+    ```r
     mymax = function(x,y) {
         num.max = x
         if (y>x) {
@@ -98,25 +249,28 @@ README.md 작성요령 (파일이름 = 대문자)
         result = x/y
         return(result)
     }                           // y=2 디폴트로 넣어서 y 생략 가능
+    ```
 
-    - 저장과 재실행
-    자주쓰는 함수를 파일로 만들어 저장해뒀다가
+-   저장과 재실행
+    ```r
+    //자주쓰는 함수를 파일로 만들어 저장해뒀다가
     setwd('C:/Users/user/Documents/test')           //wd경로
     source('C:/Users/user/Documents/test/mydiv.R')   //호출
     a = mydiv(20,4)
     print(a)
+    ```
 
-### 조건에 맞는 데이터 위치 찾기
-    > score = c(76, 84, 69, 50, 95, 60, 82, 71, 88, 84)
-    > which(score==69)
-    [1] 3
+-   조건에 맞는 데이터 위치 찾기
+    ```r
+    score = c(76, 84, 69, 50, 95, 60, 82, 71, 88, 84)
+    which(score==69)    //3
     which.max(score)    //min도 사용가능
 
-    > idx = which(score<=60)
-    > idx   // 4 6
-    > score[idx] = 61
-    > score
-    [1] 76 84 69 61 95 61 82 71 88 84
+    idx = which(score<=60)
+    idx   // 4 6
+    score[idx] = 61
+    score   //76 84 69 61 95 61 82 71 88 84
+    ```
     
     
 
