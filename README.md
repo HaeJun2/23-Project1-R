@@ -11,7 +11,86 @@ README.md 작성요령 (파일이름 = 대문자)
 작성한 코드가 너무 길 경우 README말고 다른곳 저장(재사용 불가할정도로 길 경우)
 *************
 
+## 2023-05-04
 
+### 상자그림
+-   그룹이 있는 데이터의 상자그림
+    ```r
+    dist = cars[,2]
+    boxplot(Petal.Length~Species,
+            data=iris,
+            main='품종별 꽃잎의 길이',
+            col=c('green', 'yellow', 'blue')
+            )
+
+    ```
+
+### 산점도
+-   두 변수의 데이터 분포와 변수 사이의 관계 파악 가능
+-   두 변수의 데이터 분포를 보는 것이므로 두 변수의 데이터 필요
+    ```r
+    wt = mtcars$wt                  #중량 데이터
+    mpg = mtcars$mpg                #연비 데이터
+    plot(wt, mpg                    #plot으로 선언, 변수 두개
+        , main='중량-연비 그래프'    # 제목
+        , xlab = '중량'             
+        , ylab = '연비'
+        , col = 'red'
+        , pch = 19)                 #point 종류
+    ```
+
+-   여러 변수를 가진 산점도
+    ```r
+    vars = c('mpg', 'disp', 'drat', 'wt')
+    target = mtcars[,vars]
+    head(target)
+    plot(target
+        , main = 'Multi plots')
+    ```
+
+-   그룹 정보
+    ```r
+    iris.2 = iris[3:4]
+    levels(iris$Species)
+    group = as.numeric(iris$Species)
+    color = c('red', 'green', 'blue')
+    plot(iris.2
+        , main='iris plot'
+        , pch = c(group)
+        , col=color[group])
+    ```
+
+### 데이터 분석의 절차
+1. 문제 정의/계획
+2. 데이터 수집
+3. 데이터 정제/전처리
+4. 데이터 탐색
+5. 데이터 분석
+6. 결과 보고
+
+### 단일변수 범주형 데이터 분석
+    ```r
+    install.packages('carData')
+    library(carData)
+
+    room.class = TitanicSurvival$passengerClass
+    room.class
+
+    tbl = table(room.class)
+    tbl
+
+    sum(tbl)
+
+    barplot(tbl
+            , main='선실별 탑승객'
+            , xlab = '선실등급'
+            , ylab = '탑승객수'
+            , col=c('blue', 'green', 'yellow'))
+    ```
+
+
+
+*********************
 ## 2023-04-27
 
 <p></p>
