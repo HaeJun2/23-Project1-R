@@ -11,6 +11,119 @@ README.md 작성요령 (파일이름 = 대문자)
 작성한 코드가 너무 길 경우 README말고 다른곳 저장(재사용 불가할정도로 길 경우)
 *************
 
+## 2023-05-11
+
+## 다중변수 데이터 분석
+-   두 변수에 상관관계에 있다고 말하는 경우
+    -   x축 변수 값이 증가하면 y축 변수 값이 비례해서 증가하거나
+    , x축변수값이 증가하면 y축 변수 값이 감소하는 경우
+```r
+head(pressure)
+
+plot(pressure$temperature   #x데이터
+     , pressure$pressure,   #y데이터
+     , main='온도와 기압'
+     , xlab='온도(화씨)'
+     , ylab='기압')
+```
+
+-   상관계수 : 상관관계를 수치로 나타낸 -1에서 1 사이의 값
+    -   상관계수 : 0 = 두 변수 사이에 상관성을 찾기 어려움
+    -   상관계수 : + = 양의 상관관계에 있음
+    -   상관계수 : - = 음의 상관관계에 있음
+
+```r
+head(cars)
+
+plot(cars$speed
+     , cars$dist
+     , main='자동차 속도와 제동거리'
+     , xlab='속도'
+     , ylab='제동거리')
+
+#상관계수
+cor(cars$speed,cars$dist) # cor(x,y)
+#대략 0.8
+```
+-   상관계수와 산점도 확인
+```r
+#데이터 확인
+st = data.frame(state.x77)  #매트릭스를 데이터프레임으로 변환
+head(st)
+
+#다중 산점도 작성
+plot(st)
+
+#다중 상관계수
+cor(st)
+```
+
+### 데이터 전처리
+-   데이터 전처리 : 확보한 데이터를 정제하고 가공하여 분석에 적합한 형태로 만드는 과정
+-   현실에서는 잘 정리된 데이터셋을바로 얻는 경우가 많지 않음
+
+### 결측값의 처리
+-   결측값은 데이터 수집, 저장 과정에서 값을 얻지 못하는 경우 발생(NA로 표현)
+-   결측값 처리 방법
+    -   결측값을 제거하거나 제외한 후 분석
+    -   결측값을 추정하여 적당한 값으로 치환한 후 분석
+
+-   벡터의 결측값
+```r
+z = c(1,2,3,NA,5,NA,8)  #결측값에 포함된 벡터
+sum(z)    #정상 계산이 되지 않음
+is.na(z)  #NA여부 확인
+sum(is.na(z)) #NA의 개수 확인
+sum(z, na.rm=TRUE)  #NA제외 합계 계산
+```
+-   NA를 다른 값으로 대체하는 방법과 NA를 제거하는 방법
+```r
+z1 = c(1,2,3,NA,5,NA,8)     
+z2 = c(5,8,1,NA,3,NA,7)
+z1[is.na(z1)] = 0       #na를 0으로 치환
+z1
+z3 = as.vector(na.omit(z2))     #na제거하고 새로운 백터 생성
+z3
+```
+```r
+#NA를 포함하는 test 데이터 생성
+x = iris
+x[1,2] = NA; x[1,3] = NA
+x[2,3] = NA; x[3,4] = NA
+head(x)
+```
+
+-   매트릭스와 데이터프레임의 결측값
+```r
+#for를 이용한 방법
+for(i in 1:ncol(x)){
+  this.na = is.na(x[,i])
+  cat(colnames(x)[i], '\t', sum(this.na), '\n')
+}
+```
+```r
+#apply를 이용한 방법
+col_na = function(y) {
+  return(sum(is.na(y)))
+}
+na_count = apply(x,2,FUN=col_na)
+na_count
+```
+
+```r
+#행별 NA
+rowSums(is.na(x))       #행별 NA개수
+sum(rowSums(is.na(x))>0)#NA가 포함된 행의 개수
+sum(in.na(x))
+```
+
+```r
+head(x)                     
+x[!complete.cases(x),]      #NA가 포함된 행들을 나타냄
+y = x[complete.cases(x),]   #NA가 포함된 행들 제거
+head(y)
+```
+
 ## 2023-05-04
 
 ### 상자그림
