@@ -11,6 +11,158 @@ README.md 작성요령 (파일이름 = 대문자)
 작성한 코드가 너무 길 경우 README말고 다른곳 저장(재사용 불가할정도로 길 경우)
 *************
 
+
+## 2023-05-25
+
+### 방사형 차트
+
+```r
+install.packages('fmsb')
+library(fmsb)
+
+#데이터 준비
+score = c(80,60,95,85,40)
+max.score = rep(100,5)  #100을 5회 반복
+min.score = rep(0,5)    #0을 5회 반복
+ds = rbind(max.score,min.score, score)
+ds = data.frame(ds) #매트릭스를 데이터프레임으로
+colnames(ds) = c('국어','영어','수학','물리'
+                 ,'음악')
+ds
+
+radarchart(ds)
+```
+
+-   옵션   
+```r
+radarchart(ds,
+           pcol='dark green'  #다각형 선의 색
+           , pfcol=rgb(0.2,0.5,0.5,0.5) # 다각형 내부 색
+           , plwd=3 #다각형 선의 두께
+           , cglcol='grey'  #거미줄의 색
+           , chlty=1,pty = #거미줄의 타입
+           , cglwd=0.8  # 거미줄의 두께
+           , axistype=1 # 축의 레이블 타입
+           , seg = 4  # 축의 눈금 분할
+           , axislabcol='grey' # 축의 레이블 색
+           , caxislabels=seq(0,100,25)#축의 레이블 값
+           )
+```
+
+### 텍스트 마이닝
+-   비정형 데이터에서 유용한 정보를 찾아내는 것
+-   wordcloud
+```r
+install.packages("wordcloud")
+library(wordcloud)
+
+word = c("홍길동","김유신","유관순","강감찬")
+frequency = c(651, 222, 431, 234, 542)
+
+wordcloud(word, frequency, colors = 'blue')
+
+```
+**********************************
+
+## 2023-05-18
+
+### 샘플링과 조합
+
+-   샘플링
+```r
+x = 1:100
+y = sample(x, size=10, replace=FALSE) #비복원식 추출
+y
+```
+
+```r
+idx = sample(1:nrow(iris), size=50, replace=F)
+iris.50 = iris[idx,]
+dim(iris.50)
+head(iris.50)
+# idx값에 따라 50개의 행을 추출, iris.50에 저장
+# iris행은 50개 열은 5개
+```
+
+-   임의 추출을 하되 재현가능한 결과가 필요한 경우
+```r
+sample(1:20, size=5)
+sample(1:20, size=5)
+sample(1:20, size=5)
+
+#함께실행
+set.seed(100)
+sample(1:20, size=5)
+
+set.seed(100)
+sample(1:20, size=5)
+
+sample(1:20, size=5)
+```
+
+-   조합 : 주어진 데이터값 중에서 몇 개씩 짝을 지어 추출하는 작업으로 combn()함수를 사용함
+```r
+combn(1:5,3)  #1~5에서 3개를 뽑는 조합
+
+x = c("red", "green", "blue", "black",'white')
+com = combn(x,2)
+com
+for(i in 1:ncol(com)){
+  cat(com[,i], '\n')#열을 기준으로
+}
+```
+
+-   rm(list=ls())로 중간에 한번 지우기
+
+### 데이터 집계
+-   집계 : 데이터의 그룹에 대해서 합계나 평균을 계산하는 작업
+-   aggregate() 함수 사용
+```r
+agg = aggregate(iris[,-5], by=list(iris$Species),FUN=mean)    
+agg
+```
+
+```r
+agg = aggregate(mtcars, by=list(cyl=mtcars$cyl, vs=mtcars$vs), Fun=max)
+agg
+```
+
+### 나무지도
+-   데이터가 저장하고 있는 정보나 의미를 보다 쉽게 파악할 수 있음
+```r
+install.packages('treemap')
+
+library(treemap)
+
+data(GNI2014)
+head(GNI2014)
+treemap(GNI2014
+        , index=c('continent','iso3')#계층 구조 설정
+        , vSize='population'#타일의 크기
+        , vColor='GNI'  #타일의 컬러
+        , type='value'  #타일 컬러링 방법
+        #, bg.labels='yellow'  #레이블의 배경색
+        # 백그라운드컬러 오류남 왜인지는모름
+        , title="World's GNI")
+
+```
+```r
+st = data.frame(state.x77)
+
+st = data.frame(st, stname=rownames(st))
+treemap(st
+        , index=c('stname')#계층 구조 설정
+        , vSize='Area'#타일의 크기
+        , vColor='Income'  #타일의 컬러
+        , type='value'  #타일 컬러링 방법
+        #, bg.labels='yellow'  #레이블의 배경색
+        , title="USA states area and income")
+```
+
+
+
+
+****************************
 ## 2023-05-11
 
 ## 다중변수 데이터 분석
